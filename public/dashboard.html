@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expense Tracker Dashboard</title>
+</head>
+<body>
+  <h1>Welcome to Expense Tracker Dashboard</h1>
+  
+  <!-- Expense Entry Form -->
+  <form id = 'expenseForm'>
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" name="amount" required>
+    <br>
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" required>
+    <br>
+    <label for="category">Category:</label>
+    <select id="category" name="category" required>
+      <option value="Food">Food</option>
+      <option value="Petrol">Petrol</option>
+      <option value="Salary">Salary</option>
+      <!-- Add more options as needed -->
+    </select>
+    <br>
+    <button type = 'submit'>Add Expense</button>
+  </form>
+
+  <!-- Expense Table -->
+  <table id="expenseTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Expenses will be dynamically added here -->
+    </tbody>
+  </table>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src='./dashboard.js'></script>
+</body>
+</html>

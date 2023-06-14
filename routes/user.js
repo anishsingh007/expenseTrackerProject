@@ -4,14 +4,25 @@ const router = express.Router();
 
 
 const userController = require('../controller/user')
+const expenseController = require('../controller/expenses')
 
+router.get('/',(req,res)=>res.redirect('/signup')) //redirecting empty url to deafualt signup page
+
+
+//sending file to render on /signup
 router.get('/signup',(req,res)=>{
-    res.sendFile(path.join(__dirname, '../view/signup.html'))   
-})
-router.post("/signup",userController.signup);
+    res.sendFile(path.join(__dirname,'../public/signup.html'))
 
-router.get("/login", (req, res) =>
-  res.sendFile(path.join(__dirname, "../view", "login.html"))
-);
+});
+router.post('/user-signup',userController.signup);
+
+
+router.get('/login',(req,res)=>{
+    res.sendFile(path.join(__dirname,'../public/login.html'))
+
+});
+
+router.post('/user-login',userController.login);
+
 
 module.exports = router;
