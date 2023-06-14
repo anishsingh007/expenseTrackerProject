@@ -62,11 +62,13 @@ function renderExpenses(expenses) {
     tableBody.innerHTML = '';
   
     // Check if expenses is an array
-    if (Array.isArray(expenses)) {
       expenses.forEach(expense => {
+
+        const date = new Date(expense.createdAt);
+        const formattedDate = `${date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: '2-digit' })} ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })}`;
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${expense.date}</td>
+        <td>${formattedDate}</td>
           <td>${expense.amount}</td>
           <td>${expense.description}</td>
           <td>${expense.category}</td>
@@ -76,11 +78,24 @@ function renderExpenses(expenses) {
         `;
         tableBody.appendChild(row);
       });
-    } else {
-      console.error('Invalid expenses data:', expenses);
-    }
+   
   }
   
+  // Function to delete an expense
+async function deleteExpense(expenseid) {
+    console.log(expenseid);
+    // Send the expense ID to the backend for deletion
+  await  axios.delete(`http://localhost:3000/deleteexpense/${expenseid}`)
+      .then(response => {
+        // Log the response if needed
+      
+        // Fetch the updated list of expenses
+        fetchExpenses();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
   
 
 // Fetch expenses on page load

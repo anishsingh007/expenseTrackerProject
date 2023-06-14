@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const router = express.Router();
-
+const expenses= require('../models/expenses')
 
 const expenseController = require('../controller/expenses')
 
@@ -13,8 +13,9 @@ router.get('/getexpenses',expenseController.fetchexpenses)
 router.delete('/deleteexpense/:id', async (req, res) => {
     try {
       const expenseid = req.params.id;
-      // Use the expenseId to delete the expense from the database
-  
+    // Use the expenseId to delete the expense from the database
+    await expenses.destroy({ where: { id: expenseid } });
+
       // Return a success response
       res.status(200).json({ success: true });
     } catch (error) {
