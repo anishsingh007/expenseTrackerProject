@@ -4,12 +4,14 @@ const router = express.Router();
 const expenses= require('../models/expenses')
 
 const expenseController = require('../controller/expenses')
+const userauthentication = require('../middleware/auth')
 
 
 
 
-router.post('/addexpense',expenseController.addexpense)
-router.get('/getexpenses',expenseController.fetchexpenses)
+
+router.post('/addexpense',userauthentication.authenticate,expenseController.addexpense)
+router.get('/getexpenses',userauthentication.authenticate,expenseController.fetchexpenses)
 router.delete('/deleteexpense/:id', async (req, res) => {
     try {
       const expenseid = req.params.id;

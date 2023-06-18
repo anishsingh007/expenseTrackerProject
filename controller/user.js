@@ -1,4 +1,7 @@
 const User = require('../models/users');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 
 const isstringinvalid = (value) => {
     return typeof value !== "string" || value.trim().length === 0;
@@ -19,15 +22,25 @@ const signup = async (req, res) => {
       return res
         .status(400)
         .json({ err: "Bad parameters. Something is missing" });
-    } else { console.log('hello');
-      await User.create({ name:req.body.name, email:req.body.email, password:req.body.password });
-      res.status(201).json({ message: "Successfully create new user" });
+    } else {  const saltrounds = 10;
+      bcrypt.hash(password, saltrounds, async (err, hash) => {
+        console.log(err);
+        await User.create({ name, email, password: hash });
+        res.status(201).json({ message: "Successfuly create new user" });
+      });
+      // await User.create({ name:req.body.name, email:req.body.email, password:req.body.password });
+      // res.status(201).json({ message: "Successfully create new user" });
     }
   } catch (err) {
     res.status(500).json(err);
     console.log(err.message);
   }
 };
+
+function generateAccessToken(id){
+  return jwt.sign({ userId: id, } ,'0e14a20488215bd3e75531742894adda7b85a21b434d5fa13a5dbf15555c76f1')
+}
+
 
 const login = async (req, res) => {
   try {
@@ -40,16 +53,26 @@ const login = async (req, res) => {
 
     const user = await User.findAll({ where: { email } });
     if (user.length > 0) {
-      if (user[0].password === password) {
-        res.status(200).json({
-          success: true,
-          message: "User logged in successfully",
-        });
+      bcrypt.compare(password, user[0].password, (err, result) => {
+        if (err) {
+          throw new Error("Something went wrong");
+        }
+        if (result === true) {
+          return res
+            .status(200)
+            .json({
+              success: true,
+              message: "User logged in successfully"
+              ,token: generateAccessToken(
+                user[0].id,
+             ),
+            });
       } else {
         return res
           .status(400)
           .json({ success: false, message: "Password is incorrect" });
       }
+      });
     } else {
       return res
         .status(404)
@@ -70,5 +93,6 @@ const userLogin = async (req, res) => {
 
 module.exports = {
   signup,
-  login,userLogin
+  login,userLogin,
+  
 };

@@ -14,7 +14,8 @@ async function handleFormSubmit(event) {
     const expense = {
       amount: parseFloat(amount),
       description,
-      category
+      category,
+      
     };
 
     // Send the expense data to the backend
@@ -35,8 +36,10 @@ async function handleFormSubmit(event) {
 
 // Function to send the expense data to the backend
 async function addexpense(expense) {
+  const token = localStorage.getItem('token');
   try {
-    await axios.post('http://localhost:3000/addexpense', expense);
+  
+    await axios.post('http://localhost:3000/addexpense', expense,{headers: {'Authorization': token}});
   } catch (error) {
     console.error(error);
   }
@@ -44,7 +47,8 @@ async function addexpense(expense) {
 
 // Function to fetch expenses from the backend
 function fetchExpenses() {
-  axios.get('http://localhost:3000/getexpenses')  // Replace with the appropriate URL for fetching expenses
+  const token = localStorage.getItem('token')
+  axios.get('http://localhost:3000/getexpenses',{headers: {'Authorization': token}})  // Replace with the appropriate URL for fetching expenses
     .then(response => {
       const expenses = response.data;
       renderExpenses(expenses);
@@ -63,7 +67,7 @@ function renderExpenses(expenses) {
   
     // Check if expenses is an array
       expenses.forEach(expense => {
-
+        //changinging createdAt to a suitable date format
         const date = new Date(expense.createdAt);
         const formattedDate = `${date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: '2-digit' })} ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })}`;
         const row = document.createElement('tr');

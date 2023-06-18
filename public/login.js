@@ -12,6 +12,9 @@ async function login(e) {
     .post("http://localhost:3000/user-login", loginDetails)
     .then((response) => {
       if (response.status === 200) {
+        const token = response.data.token; // Assign the token to a variable
+        localStorage.setItem('token', token);
+        console.log(token);
         alert(response.data.message);
         window.location.href='/dashboard.html'
       }

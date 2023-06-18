@@ -1,4 +1,5 @@
 const Expense = require('../models/expenses');
+const jwt = require("jsonwebtoken");
 
 const addexpense = (req, res) => {
     const { amount, description, category } = req.body;
@@ -8,7 +9,7 @@ const addexpense = (req, res) => {
         return res.status(400).json({success: false, message: 'Parameters missing'})
     }
     
-    Expense.create({ amount, description, category, }).then(expense => {
+    Expense.create({ amount, description, category, userId :req.user.id}).then(expense => {
         return res.status(201).json({expense, success: true } );
     }).catch(err => {
         return res.status(500).json({success : false, error: err})
@@ -17,7 +18,7 @@ const addexpense = (req, res) => {
 
  const fetchexpenses = (req, res)=> {
     
-    Expense.findAll().then(expenses => {
+    Expense.findAll({ where : { userId: req.user.id}}).then(expenses => {
         return res.status(200).json(expenses)
     })
     .catch(err => {
