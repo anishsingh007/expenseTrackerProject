@@ -36,19 +36,23 @@ async function handleFormSubmit(event) {
 
 // Function to send the expense data to the backend
 async function addexpense(expense) {
-  const token = localStorage.getItem('token');
-  try {
   
+  try {
+    const token = localStorage.getItem('token'); 
     await axios.post('http://localhost:3000/addexpense', expense,{headers: {'Authorization': token}});
   } catch (error) {
     console.error(error);
   }
 }
 
+
+
+
 // Function to fetch expenses from the backend
 function fetchExpenses() {
   const token = localStorage.getItem('token')
-  axios.get('http://localhost:3000/getexpenses',{headers: {'Authorization': token}})  // Replace with the appropriate URL for fetching expenses
+  console.log(token);
+  axios.get('http://localhost:3000/getexpenses',{headers: {'Authorization': token}})  
     .then(response => {
       const expenses = response.data;
       renderExpenses(expenses);
@@ -84,12 +88,13 @@ function renderExpenses(expenses) {
       });
    
   }
-  
+ 
   // Function to delete an expense
 async function deleteExpense(expenseid) {
     console.log(expenseid);
+    const token = localStorage.getItem('token');
     // Send the expense ID to the backend for deletion
-  await  axios.delete(`http://localhost:3000/deleteexpense/${expenseid}`)
+  await  axios.delete(`http://localhost:3000/deleteexpense/${expenseid}`,{headers: {'Authorization': token}})
       .then(response => {
         // Log the response if needed
       
@@ -104,3 +109,64 @@ async function deleteExpense(expenseid) {
 
 // Fetch expenses on page load
 fetchExpenses();
+
+
+ // Premium button handler
+ function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
+
+
+ document.getElementById('rzp-button1').onclick = async function(e) {
+
+const token = localStorage.getItem('token')
+  const response= await axios.get('http://localhost:3000/premiummembership',{headers: {'Authorization': token}})
+  console.log(response);
+  var options = 
+  {
+    "key":response.data.key_id,
+    "order_id":response.data.order.id,
+    "handler":async function(response){
+      await axios.post('http://localhost:3000/updatetransactionstatus',{
+      order_id: options.order_id,
+      payment_id: response.razorpay_payment_id,
+    },{headers: {'Authorization': token}})
+
+    alert('You are a Premium user Now')
+    console.log(response.data);
+    console.log(res.data);
+    localStorage.setItem('token', res.data.token)
+    },
+  };
+
+  const rzp1= new Razorpay(options);
+  rzp1.open();
+  e.preventDefault();
+
+  rzp1.on('payment.failed', function(response){
+    console.log(response)
+    alert('Something Went Wrong')
+  })
+    };
+
+    function showPremiumUserMessage(name) {
+      document.getElementById('rzp-button1').style.visibility = 'hidden';
+      document.getElementById('message').innerHTML = `Hi ${name}! You are a Premium User Now!`;
+    }
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const decodeToken = parseJwt(token);
+      console.log(decodeToken);
+      const isPremiumUser = decodeToken.ispremiumuser;
+      const name = decodeToken.name;
+      if (isPremiumUser && name) {
+        showPremiumUserMessage(name);
+      }
+    });

@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 const userController = require('../controller/user')
-const expenseController = require('../controller/expenses')
+
 
 router.get('/',(req,res)=>res.redirect('/signup')) //redirecting empty url to deafualt signup page
 

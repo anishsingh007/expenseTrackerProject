@@ -12,7 +12,7 @@ const userauthentication = require('../middleware/auth')
 
 router.post('/addexpense',userauthentication.authenticate,expenseController.addexpense)
 router.get('/getexpenses',userauthentication.authenticate,expenseController.fetchexpenses)
-router.delete('/deleteexpense/:id', async (req, res) => {
+router.delete('/deleteexpense/:id',userauthentication.authenticate, async (req, res) => {
     try {
       const expenseid = req.params.id;
     // Use the expenseId to delete the expense from the database

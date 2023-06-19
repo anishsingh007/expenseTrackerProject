@@ -37,10 +37,9 @@ const signup = async (req, res) => {
   }
 };
 
-function generateAccessToken(id){
-  return jwt.sign({ userId: id, } ,'0e14a20488215bd3e75531742894adda7b85a21b434d5fa13a5dbf15555c76f1')
-}
-
+const generateAccessToken = (id, name, ispremiumuser) => {
+  return jwt.sign({ userId: id, name: name, ispremiumuser }, "secretkey");
+};
 
 const login = async (req, res) => {
   try {
@@ -48,9 +47,9 @@ const login = async (req, res) => {
     if (isstringinvalid(email) || isstringinvalid(password)) {
       return res
         .status(400)
-        .json({ message: "Email id or password is missing", success: false });
+        .json({ message: "EMail idor password is missing ", success: false });
     }
-
+    console.log(password);
     const user = await User.findAll({ where: { email } });
     if (user.length > 0) {
       bcrypt.compare(password, user[0].password, (err, result) => {
@@ -62,37 +61,32 @@ const login = async (req, res) => {
             .status(200)
             .json({
               success: true,
-              message: "User logged in successfully"
-              ,token: generateAccessToken(
+              message: "User logged in successfully",
+              token: generateAccessToken(
                 user[0].id,
-             ),
+                user[0].name,
+                user[0].ispremiumuser
+              ),
             });
-      } else {
-        return res
-          .status(400)
-          .json({ success: false, message: "Password is incorrect" });
-      }
+        } else {
+          return res
+            .status(400)
+            .json({ success: false, message: "Password is incorrect" });
+        }
       });
     } else {
       return res
         .status(404)
-        .json({ success: false, message: "User does not exist" });
+        .json({ success: false, message: "User Doesnot exitst" });
     }
   } catch (err) {
     res.status(500).json({ message: err, success: false });
   }
 };
 
-const userLogin = async (req, res) => {
-    try {
-      // Implementation for user login
-    } catch (err) {
-      res.status(500).json({ message: err, success: false });
-    }
-  };
-
 module.exports = {
   signup,
-  login,userLogin,
-  
+  login,
+  generateAccessToken
 };
+

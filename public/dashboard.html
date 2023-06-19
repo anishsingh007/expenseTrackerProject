@@ -4,7 +4,14 @@
   <title>Expense Tracker Dashboard</title>
 </head>
 <body>
+
+
+
   <h1>Welcome to Expense Tracker Dashboard</h1>
+    <div id="message"></div>
+<!-- buy premium button -->
+<button id="rzp-button1">Buy Premium</button>
+
   
   <!-- Expense Entry Form -->
   <form id = 'expenseForm'>
@@ -39,7 +46,8 @@
       <!-- Expenses will be dynamically added here -->
     </tbody>
   </table>
-
+  <!-- Include Razorpay SDK script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script> 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src='./dashboard.js'></script>
 </body>
