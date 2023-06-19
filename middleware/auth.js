@@ -1,26 +1,45 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 
-const authenticate = (req, res, next) => {    
-    try {
-        const token = req.header('Authorization');
-        console.log(token);
-        const user = jwt.verify(token, '0e14a20488215bd3e75531742894adda7b85a21b434d5fa13a5dbf15555c76f1');
-        console.log('userID >>>> ', user.userId)
-        User.findByPk(user.userId).then(user => {
+const authenticate = (req, res, next) => {
+  try {
+    const token = req.header('Authorization');
+    console.log(req.headers);
+    console.log('Token:', token);
 
-            req.user = user; ///ver
-            next();
-        })
+    if (!token) {
+      return res.status(401).json({ success: false, message: 'No token provided' });
+    }
 
-      } catch(err) {
-        console.log(err);
-        return res.status(401).json({success: false,message: 'Authentication failed'})
-        // err
+    jwt.verify(token, 'anish1234567890', (err, decoded) => {
+      if (err) {
+        console.log('Error:', err);
+        return res.status(401).json({ success: false, message: 'Invalid token' });
       }
 
-}
+      const userId = decoded.userId;
+      console.log('User ID:', userId);
+
+      User.findByPk(userId)
+        .then(user => {
+          if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+          }
+
+          req.user = user;
+          next();
+        })
+        .catch(error => {
+          console.log('Database error:', error);
+          res.status(500).json({ success: false, message: 'Database error' });
+        });
+    });
+  } catch (error) {
+    console.log('Exception:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
 
 module.exports = {
-    authenticate
-}
+  authenticate
+};

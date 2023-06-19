@@ -51,8 +51,8 @@ async function addexpense(expense) {
 // Function to fetch expenses from the backend
 function fetchExpenses() {
   const token = localStorage.getItem('token')
-  console.log(token);
-  axios.get('http://localhost:3000/getexpenses',{headers: {'Authorization': token}})  
+ console.log(token);
+  axios.get('http://localhost:3000/getexpenses',{headers: {'Authorization': token}})
     .then(response => {
       const expenses = response.data;
       renderExpenses(expenses);
@@ -122,6 +122,22 @@ fetchExpenses();
   return JSON.parse(jsonPayload);
 }
 
+function showPremiumUserMessage(name) {
+  document.getElementById('rzp-button1').style.visibility = 'hidden';
+  document.getElementById('message').innerHTML = `Hi ${name}! You are a Premium User Now!`;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+  const decodeToken = parseJwt(token);
+  console.log(decodeToken);
+  const isPremiumUser = decodeToken.ispremiumuser;
+  const name = decodeToken.name;
+  if (isPremiumUser && name) {
+    showPremiumUserMessage(name);
+  }
+});
+
 
  document.getElementById('rzp-button1').onclick = async function(e) {
 
@@ -140,8 +156,7 @@ const token = localStorage.getItem('token')
 
     alert('You are a Premium user Now')
     console.log(response.data);
-    console.log(res.data);
-    localStorage.setItem('token', res.data.token)
+    localStorage.setItem('token', response.data.token)
     },
   };
 
@@ -155,18 +170,4 @@ const token = localStorage.getItem('token')
   })
     };
 
-    function showPremiumUserMessage(name) {
-      document.getElementById('rzp-button1').style.visibility = 'hidden';
-      document.getElementById('message').innerHTML = `Hi ${name}! You are a Premium User Now!`;
-    }
     
-    window.addEventListener('DOMContentLoaded', () => {
-      const token = localStorage.getItem('token');
-      const decodeToken = parseJwt(token);
-      console.log(decodeToken);
-      const isPremiumUser = decodeToken.ispremiumuser;
-      const name = decodeToken.name;
-      if (isPremiumUser && name) {
-        showPremiumUserMessage(name);
-      }
-    });
