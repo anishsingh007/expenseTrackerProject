@@ -11,7 +11,8 @@
     <div id="message"></div>
 <!-- buy premium button -->
 <button id="rzp-button1">Buy Premium</button>
-
+ <!-- Leaderboard button -->
+<button id="lbButton">LeaderBoard</button>
   
   <!-- Expense Entry Form -->
   <form id = 'expenseForm'>
@@ -46,6 +47,12 @@
       <!-- Expenses will be dynamically added here -->
     </tbody>
   </table>
+
+  <!-- LeaderBoard Table -->
+  <ul id="leaderboard">
+  </ul>
+  
+  <button onclick="download()" id="downloadexpense">Download File</button>
   <!-- Include Razorpay SDK script -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script> 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

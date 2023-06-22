@@ -2,6 +2,11 @@
 const expenseForm = document.querySelector('#expenseForm');
 expenseForm.addEventListener('submit', handleFormSubmit);
 
+// leaderboard button hinding
+const lbButton = document.getElementById('lbButton');
+lbButton.style.display = 'none';
+
+
 // Function to handle form submission
 async function handleFormSubmit(event) {
   try {
@@ -56,6 +61,7 @@ function fetchExpenses() {
     .then(response => {
       const expenses = response.data;
       renderExpenses(expenses);
+      
     })
     .catch(error => {
       console.error(error);
@@ -110,6 +116,22 @@ async function deleteExpense(expenseid) {
 // Fetch expenses on page load
 fetchExpenses();
 
+//show leaderboard function
+
+function showLeaderboard(){
+  lbButton.style.display = 'block';
+  lbButton.onclick= async ()=>
+  {
+    const token = localStorage.getItem('token')
+    const userLeaderBoardArray = await axios.get('http://localhost:3000/premium/showLeaderBoard',{headers: {'Authorization': token}})
+    console.log(userLeaderBoardArray)
+
+    const leaderBoardElem= document.getElementById('leaderboard');
+    leaderBoardElem.innerHTML += '<h1> Leader Board</h>'
+   userLeaderBoardArray.data.forEach((userDetails)=>
+    leaderBoardElem.innerHTML += `<li> Name - ${userDetails.name} Total Expense - ${userDetails.total_cost}</li>`)
+  }
+}
 
  // Premium button handler
  function parseJwt (token) {
@@ -135,6 +157,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const name = decodeToken.name;
   if (isPremiumUser && name) {
     showPremiumUserMessage(name);
+    showLeaderboard()
   }
 });
 
@@ -155,8 +178,10 @@ const token = localStorage.getItem('token')
     },{headers: {'Authorization': token}})
 
     alert('You are a Premium user Now')
-    console.log(response.data);
-    localStorage.setItem('token', response.data.token)
+    
+    document.getElementById('rzp-button1').style.visibility = 'hidden';
+    document.getElementById('message').innerHTML = `Hi ${name}! You are a Premium User Now!`
+    showLeaderboard()
     },
   };
 
