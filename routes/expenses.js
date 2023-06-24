@@ -12,6 +12,8 @@ const userauthentication = require('../middleware/auth')
 
 router.post('/addexpense',userauthentication.authenticate,expenseController.addexpense)
 router.get('/getexpenses',userauthentication.authenticate,expenseController.fetchexpenses)
+router.get('/download', userauthentication.authenticate, expenseController.downloadExpense)
+
 router.delete('/deleteexpense/:id',userauthentication.authenticate, async (req, res) => {
     try {
       const expenseid = req.params.id;
@@ -25,7 +27,7 @@ router.delete('/deleteexpense/:id',userauthentication.authenticate, async (req, 
       res.status(500).json({ error: 'Internal server error' });
     }
   });
-  
+
 
 
 module.exports = router;

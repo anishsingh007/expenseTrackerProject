@@ -116,6 +116,11 @@ async function deleteExpense(expenseid) {
 // Fetch expenses on page load
 fetchExpenses();
 
+
+function showError(err){
+  document.body.innerHTML += `<div style="color:red;"> ${err}2</div>`
+}
+
 //show leaderboard function
 
 function showLeaderboard(){
@@ -132,6 +137,29 @@ function showLeaderboard(){
     leaderBoardElem.innerHTML += `<li> Name - ${userDetails.name} Total Expense - ${userDetails.total_cost}</li>`)
   }
 }
+
+
+// ...
+
+function download() {
+  const token = localStorage.getItem('token');
+  console.log(token);
+  axios
+    .get('http://localhost:3000/download', { headers: { Authorization: token } })
+    .then((response) => {
+      if (response.status === 200 && response.data.success) {
+        const fileURL = response.data.fileURL;
+        window.open(fileURL);
+      } else {
+        throw new Error('Failed to download expenses');
+      }
+    })
+    .catch((err) => {
+      showError(err);
+    });
+}
+
+
 
  // Premium button handler
  function parseJwt (token) {
