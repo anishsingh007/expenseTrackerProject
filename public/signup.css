@@ -1,0 +1,122 @@
+/* signup.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .background-image {
+    background-image: url('https://as2.ftcdn.net/v2/jpg/00/84/18/31/1000_F_84183141_rCVQH6YX9hp2qiPH9QD2A7FkihzjxYZe.jpg'); /* Replace 'background-image.jpg' with your own image file */
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    z-index: -1;
+    display: flex;
+  }
+  
+  .modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+  }
+  
+  .modal-content {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    color: #fff;
+  }
+  
+  h1 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  
+  form label {
+    font-weight: bold;
+  }
+  
+  button {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #fff;
+  }
+  
+  /* Additional Styles for Bootstrap Classes */
+  .form-control {
+    border-radius: 0;
+  }
+  
+  .btn-primary {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+  }
+  
+  /* signup.css */
+
+/* signup.css */
+
+@keyframes typewriter {
+    0% {
+      width: 0;
+      opacity: 0;
+    }
+    100% {
+      width: 100%;
+      opacity: 1;
+    }
+  }
+  
+  .quote-container {
+    text-align: center;
+    position: relative;
+   
+  }
+  
+  .quote {
+    font-size: 200%;
+    font-weight: bold;
+    color: #ffcc00;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typewriter 1s steps(40) infinite;
+    animation-delay: 3s; /* Delay the animation start by 1 second */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
+  
+  .signup-container {
+    text-align: center;
+    position: center;
+   
+  }
+  .signup1 {
+    font-size: 200%;
+    font-weight: bold;
+    color: #19901b;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-text-stroke: 1px #000;
+    text-stroke: 1px #000;
+    margin-top: 50px;
+  }
+ 
+  .made-in-india-logo {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 200px; /* Adjust the size as needed */
+    opacity: 1; /* Adjust the opacity as needed */
+  }
+  
